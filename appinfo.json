@@ -1,8 +1,8 @@
 {
   "uuid": "a8395bc9-679b-4bd7-a571-edfa49130c4e",
   "shortName": "smartutils",
-  "longName": "smartutils",
-  "companyName": "MakeAwesomeHappen",
+  "longName": "SmartUtils for Pebble",
+  "companyName": "Datum Unlimited",
   "versionCode": 1,
   "versionLabel": "1.0",
   "watchapp": {
