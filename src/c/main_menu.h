@@ -8,7 +8,7 @@ SimpleMenuLayer* menu_layer;
 // Menu sections
 SimpleMenuSection menu_sections[NUM_MENU_SECTIONS];
 // Items included in the sections
-SimpleMenuItem first_menu_items[NUM_FIRST_MENU_ITEMS];
+SimpleMenuItem menu_items[NUM_FIRST_MENU_ITEMS];
 
 void init_menu();
 void menu_select_callback(int, void*);
