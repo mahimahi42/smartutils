@@ -1,4 +1,4 @@
-smartutils
+SmartUtils
 ==========
 
 SmartUtils for Pebble is a collection of small applets bundled together for the
