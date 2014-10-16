@@ -8,7 +8,7 @@ Window* weather_window;
 TextLayer* weather_temp_text_layer;
 
 // Buffers for AppMessages
-static char temp_buffer[8];
+static char temp_buffer[32];
 
 // Lifecycle functions
 void weather_window_init();

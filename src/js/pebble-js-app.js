@@ -1,8 +1,6 @@
 // Listen for the app opening
 Pebble.addEventListener('ready', function(e) {
     console.log("PebbleKit JS ready!");
-
-    getWeather();
 });
 
 // Listen for incoming AppMessage
@@ -31,22 +29,21 @@ function locationSuccess(pos) {
         function(responseText) {
             var json = JSON.parse(responseText);
 
-            var temp = Math.round(json.main.temp - 273.15);
-            console.log("Temperature is: " + temp);
-        }
-    );
+            var temperature = Math.round(json.main.temp - 273.15);
+            console.log("Temperature is: " + temperature);
 
-    // Assemble key dictionary
-    var dictionary = {
-        "KEY_WEATHER_TEMP": temp
-    };
-
-    Pebble.sendAppMessage(dictionary,
-        function(e) {
-            console.log("Weather info sent successfully");
-        },
-        function(e) {
-            console.log("Weather info sending error");
+            // Assemble key dictionary
+            var dictionary = {
+                "KEY_WEATHER_TEMP": temperature
+            };
+            Pebble.sendAppMessage(dictionary,
+                function(e) {
+                    console.log("Weather info sent to Pebble successfully!");
+                },
+                function(e) {
+                    console.log("Error sending weather info to Pebble!");
+                }
+            );
         }
     );
 }

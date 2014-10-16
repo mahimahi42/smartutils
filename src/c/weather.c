@@ -19,6 +19,16 @@ void weather_window_init()
                      app_message_outbox_size_maximum());
 
     window_set_click_config_provider(weather_window, weather_click_to_close);
+
+    // Begin dictionary
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+
+    // Add a key-value pair
+    dict_write_uint8(iter, 0, 0);
+
+    // Send the message!
+    app_message_outbox_send();
 }
 
 void weather_window_deinit()
@@ -61,21 +71,10 @@ void weather_back_click_handler(ClickRecognizerRef recognizer,
 void weather_inbox_received_callback(DictionaryIterator* iterator, 
                                      void* context) {
     // Read first item
-    Tuple* t = dict_read_first(iterator);
-
-    while (t != NULL) {
-        switch (t->key) {
-        case KEY_WEATHER_TEMP:
-            snprintf(temp_buffer, sizeof(temp_buffer), "%dC", (int)t->value->int32);
-            break;
-        default:
-            APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
-            break;
-        }
-        t = dict_read_next(iterator);
-    }
-
+    Tuple* t = dict_find(iterator, KEY_WEATHER_TEMP);
+    snprintf(temp_buffer, sizeof(temp_buffer), "%dC", (int)t->value->int32);
     text_layer_set_text(weather_temp_text_layer, temp_buffer);
+    layer_mark_dirty(text_layer_get_layer(weather_temp_text_layer));
 }
 
 void weather_inbox_dropped_callback(AppMessageResult reason, void* context) {
