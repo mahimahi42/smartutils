@@ -35,8 +35,6 @@ function locationSuccess(pos) {
             var high_t = celsiusToFahrenheit(Math.round(json.main.temp_max - 273.15));
             var cond = json.weather[0].main;
 
-            console.log("****** COND: " + cond + " *****");
-
             // Assemble key dictionary
             var dictionary = {
                 "KEY_WEATHER_TEMP": temperature,

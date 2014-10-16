@@ -39,6 +39,7 @@ void weather_window_load(Window* window) {
     text_layer_set_background_color(weather_info_text_layer, GColorClear);
     text_layer_set_text_color(weather_info_text_layer, GColorBlack);
     text_layer_set_text_alignment(weather_info_text_layer, GTextAlignmentLeft);
+    text_layer_set_font(weather_info_text_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28));
     layer_add_child(window_get_root_layer(weather_window), 
                     text_layer_get_layer(weather_info_text_layer));
 }
