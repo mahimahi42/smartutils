@@ -34,7 +34,7 @@ void init()
         .load = window_load,
         .unload = window_unload,
     });
-    window_stack_push(window, true);
+    window_stack_push(window, ANIMATED);
 }
 
 void deinit()

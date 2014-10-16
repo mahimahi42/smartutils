@@ -7,4 +7,6 @@
 #include "main_menu.h"
 #include "weather.h"
 
+static const bool ANIMATED = true;
+
 #endif
