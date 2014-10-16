@@ -27,12 +27,20 @@ void weather_window_deinit()
 }
 
 void weather_window_load(Window* window) {
-    weather_temp_text_layer = text_layer_create(GRect(0, 0, 144, 168));
-    text_layer_set_background_color(weather_temp_text_layer, GColorClear);
-    text_layer_set_text_color(weather_temp_text_layer, GColorBlack);
-    text_layer_set_text_alignment(weather_temp_text_layer, GTextAlignmentCenter);
+    weather_title_text_layer = text_layer_create(GRect(0, 0, 144, 16));
+    text_layer_set_background_color(weather_title_text_layer, GColorBlack);
+    text_layer_set_text_color(weather_title_text_layer, GColorClear);
+    text_layer_set_text_alignment(weather_title_text_layer, GTextAlignmentCenter);
     layer_add_child(window_get_root_layer(weather_window), 
-                    text_layer_get_layer(weather_temp_text_layer));
+                    text_layer_get_layer(weather_title_text_layer));
+    text_layer_set_text(weather_title_text_layer, "Weather");
+
+    weather_info_text_layer = text_layer_create(GRect(0, 16, 144, 152));
+    text_layer_set_background_color(weather_info_text_layer, GColorClear);
+    text_layer_set_text_color(weather_info_text_layer, GColorBlack);
+    text_layer_set_text_alignment(weather_info_text_layer, GTextAlignmentLeft);
+    layer_add_child(window_get_root_layer(weather_window), 
+                    text_layer_get_layer(weather_info_text_layer));
 }
 
 void weather_window_appear(Window* window) {
@@ -52,7 +60,7 @@ void weather_window_disappear(Window* window) {
 }
 
 void weather_window_unload(Window* window) {
-    text_layer_destroy(weather_temp_text_layer);
+    text_layer_destroy(weather_info_text_layer);
 }
 
 void weather_click_to_close(void* context) {
@@ -81,15 +89,37 @@ void weather_down_click_handler(ClickRecognizerRef recognizer,
 void weather_inbox_received_callback(DictionaryIterator* iterator, 
                                      void* context) {
     // Read first item
-    Tuple* t = dict_find(iterator, KEY_WEATHER_TEMP);
+    Tuple* t = dict_read_first(iterator);
 
-    if (weather_temp_text_layer == NULL) {
+    while (t != NULL) {
+        switch (t->key) {
+        case KEY_WEATHER_TEMP:
+            snprintf(temp_buffer, sizeof(temp_buffer), "Temp: %dF", (int)t->value->int32);
+            break;
+        case KEY_WEATHER_TEMP_LOW:
+            snprintf(temp_low_buffer, sizeof(temp_low_buffer), "Low Temp: %dF", (int)t->value->int32);
+            break;
+        case KEY_WEATHER_TEMP_HIGH:
+            snprintf(temp_high_buffer, sizeof(temp_high_buffer), "High Temp: %dF", (int)t->value->int32);
+            break;
+        case KEY_WEATHER_COND:
+            snprintf(cond_buffer, sizeof(temp_buffer), "%s", t->value->cstring);
+            break;
+        default:
+            APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
+            break;
+        }
+
+        t = dict_read_next(iterator);
+    }
+
+    if (weather_info_text_layer == NULL) {
         weather_window_load(weather_window);
     }
 
-    snprintf(temp_buffer, sizeof(temp_buffer), "%dC", (int)t->value->int32);
-    text_layer_set_text(weather_temp_text_layer, temp_buffer);
-    layer_mark_dirty(text_layer_get_layer(weather_temp_text_layer));
+    snprintf(info_buffer, sizeof(info_buffer), "%s\n%s\n%s\n%s", temp_buffer, temp_low_buffer, temp_high_buffer, cond_buffer);
+    text_layer_set_text(weather_info_text_layer, info_buffer);
+    layer_mark_dirty(text_layer_get_layer(weather_info_text_layer));
 }
 
 void weather_inbox_dropped_callback(AppMessageResult reason, void* context) {

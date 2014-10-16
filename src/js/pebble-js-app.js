@@ -30,13 +30,21 @@ function locationSuccess(pos) {
         function(responseText) {
             var json = JSON.parse(responseText);
 
-            var temperature = Math.round(json.main.temp - 273.15);
-            console.log("Temperature is: " + temperature);
+            var temperature = celsiusToFahrenheit(Math.round(json.main.temp - 273.15));
+            var low_t = celsiusToFahrenheit(Math.round(json.main.temp_min - 273.15));
+            var high_t = celsiusToFahrenheit(Math.round(json.main.temp_max - 273.15));
+            var cond = json.weather[0].main;
+
+            console.log("****** COND: " + cond + " *****");
 
             // Assemble key dictionary
             var dictionary = {
-                "KEY_WEATHER_TEMP": temperature
+                "KEY_WEATHER_TEMP": temperature,
+                "KEY_WEATHER_TEMP_LOW": low_t,
+                "KEY_WEATHER_TEMP_HIGH": high_t,
+                "KEY_WEATHER_COND": cond,
             };
+
             Pebble.sendAppMessage(dictionary,
                 function(e) {
                     console.log("Weather info sent to Pebble successfully!");
@@ -61,4 +69,9 @@ function getWeather() {
         locationError,
         {timeout: 15000, maximumAge: 60000}
     );
+}
+
+function celsiusToFahrenheit(cel) {
+    var fah = (cel * 9) / 5
+    return fah + 32;
 }

@@ -2,13 +2,23 @@
 #define WEATHER_H
 
 #define KEY_WEATHER_TEMP 0
+#define KEY_WEATHER_TEMP_LOW 1
+#define KEY_WEATHER_TEMP_HIGH 2
+#define KEY_WEATHER_COND 3
 
 // Window for weather applet
 Window* weather_window;
-TextLayer* weather_temp_text_layer;
+
+// TextLayers for weather info
+TextLayer* weather_title_text_layer;
+TextLayer* weather_info_text_layer;
 
 // Buffers for AppMessages
-static char temp_buffer[32];
+static char temp_buffer[16];
+static char temp_low_buffer[16];
+static char temp_high_buffer[16];
+static char cond_buffer[64];
+static char info_buffer[256];
 
 // Lifecycle functions
 void weather_window_init();
