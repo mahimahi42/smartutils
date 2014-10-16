@@ -12,7 +12,7 @@ void init_menu()
 
     menu_items[num_a_items++] = (SimpleMenuItem) {
         .title = "Weather",
-        .callback = menu_select_callback,
+        .callback = weather_select_callback,
     };
 
     menu_items[num_a_items++] = (SimpleMenuItem) {
@@ -48,4 +48,10 @@ void menu_select_callback(int index, void* ctx)
 {
     menu_items[index].subtitle = "You've hit select here!";
     layer_mark_dirty(simple_menu_layer_get_layer(menu_layer));
+}
+
+// Callback for user selecting Weather applet
+void weather_select_callback(int index, void* ctx)
+{
+    window_stack_push(weather_window, ANIMATED);
 }

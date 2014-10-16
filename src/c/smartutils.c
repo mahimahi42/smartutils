@@ -13,6 +13,9 @@ void window_load(Window* window)
     // Initialize the menu items
     init_menu();
 
+    // Initialize the applets
+    weather_window_init();
+
     // Get the bounds of the window
     Layer* window_layer = window_get_root_layer(window);
     GRect bounds = layer_get_frame(window_layer);
@@ -24,6 +27,7 @@ void window_load(Window* window)
 void window_unload(Window* window)
 {
     simple_menu_layer_destroy(menu_layer);
+    weather_window_deinit();
 }
 
 void init()
