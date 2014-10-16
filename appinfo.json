@@ -8,8 +8,9 @@
   "watchapp": {
     "watchface": false
   },
+  "capabilities": ["location"],
   "appKeys": {
-    "dummy": 0
+    "KEY_WEATHER_TEMP": 0
   },
   "resources": {
     "media": []

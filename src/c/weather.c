@@ -33,8 +33,8 @@ void weather_window_load(Window* window) {
     text_layer_set_text_alignment(weather_temp_text_layer, GTextAlignmentCenter);
     layer_add_child(window_get_root_layer(weather_window), 
                     text_layer_get_layer(weather_temp_text_layer));
-    text_layer_set_text(weather_temp_text_layer, 
-                        "Testing...");
+    //text_layer_set_text(weather_temp_text_layer, 
+    //                    "Testing...");
 }
 
 void weather_window_appear(Window* window) {
@@ -60,7 +60,22 @@ void weather_back_click_handler(ClickRecognizerRef recognizer,
 
 void weather_inbox_received_callback(DictionaryIterator* iterator, 
                                      void* context) {
+    // Read first item
+    Tuple* t = dict_read_first(iterator);
 
+    while (t != NULL) {
+        switch (t->key) {
+        case KEY_WEATHER_TEMP:
+            snprintf(temp_buffer, sizeof(temp_buffer), "%dC", (int)t->value->int32);
+            break;
+        default:
+            APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
+            break;
+        }
+        t = dict_read_next(iterator);
+    }
+
+    text_layer_set_text(weather_temp_text_layer, temp_buffer);
 }
 
 void weather_inbox_dropped_callback(AppMessageResult reason, void* context) {
