@@ -19,6 +19,7 @@ void weather_window_disappear(Window*);
 void weather_window_unload(Window*);
 void weather_click_to_close(void*);
 void weather_back_click_handler(ClickRecognizerRef, void*);
+void weather_down_click_handler(ClickRecognizerRef, void*);
 
 // AppMessage API (for weather info)
 void weather_inbox_received_callback(DictionaryIterator*, void*);

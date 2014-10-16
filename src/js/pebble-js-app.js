@@ -1,6 +1,7 @@
 // Listen for the app opening
 Pebble.addEventListener('ready', function(e) {
     console.log("PebbleKit JS ready!");
+    //getWeather();
 });
 
 // Listen for incoming AppMessage

@@ -19,16 +19,6 @@ void weather_window_init()
                      app_message_outbox_size_maximum());
 
     window_set_click_config_provider(weather_window, weather_click_to_close);
-
-    // Begin dictionary
-    DictionaryIterator *iter;
-    app_message_outbox_begin(&iter);
-
-    // Add a key-value pair
-    dict_write_uint8(iter, 0, 0);
-
-    // Send the message!
-    app_message_outbox_send();
 }
 
 void weather_window_deinit()
@@ -43,12 +33,18 @@ void weather_window_load(Window* window) {
     text_layer_set_text_alignment(weather_temp_text_layer, GTextAlignmentCenter);
     layer_add_child(window_get_root_layer(weather_window), 
                     text_layer_get_layer(weather_temp_text_layer));
-    //text_layer_set_text(weather_temp_text_layer, 
-    //                    "Testing...");
 }
 
 void weather_window_appear(Window* window) {
+    // Begin dictionary
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
 
+    // Add a key-value pair
+    dict_write_uint8(iter, 0, 0);
+
+    // Send the message!
+    app_message_outbox_send();
 }
 
 void weather_window_disappear(Window* window) {
@@ -61,6 +57,7 @@ void weather_window_unload(Window* window) {
 
 void weather_click_to_close(void* context) {
     window_single_click_subscribe(BUTTON_ID_BACK, weather_back_click_handler);
+    window_single_click_subscribe(BUTTON_ID_DOWN, weather_down_click_handler);
 }
 
 void weather_back_click_handler(ClickRecognizerRef recognizer, 
@@ -68,10 +65,28 @@ void weather_back_click_handler(ClickRecognizerRef recognizer,
     window_stack_pop(ANIMATED);
 }
 
+void weather_down_click_handler(ClickRecognizerRef recognizer,
+                                void* context) {
+    // Begin dictionary
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+
+    // Add a key-value pair
+    dict_write_uint8(iter, 0, 0);
+
+    // Send the message!
+    app_message_outbox_send();
+}
+
 void weather_inbox_received_callback(DictionaryIterator* iterator, 
                                      void* context) {
     // Read first item
     Tuple* t = dict_find(iterator, KEY_WEATHER_TEMP);
+
+    if (weather_temp_text_layer == NULL) {
+        weather_window_load(weather_window);
+    }
+
     snprintf(temp_buffer, sizeof(temp_buffer), "%dC", (int)t->value->int32);
     text_layer_set_text(weather_temp_text_layer, temp_buffer);
     layer_mark_dirty(text_layer_get_layer(weather_temp_text_layer));
