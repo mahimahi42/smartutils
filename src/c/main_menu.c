@@ -37,7 +37,7 @@ void init_menu()
 
     // Bind the menu items to their sections
     menu_sections[0] = (SimpleMenuSection) {
-        .title = "SmartUtils",
+        .title = "SmartUtils for Pebble",
         .num_items = NUM_FIRST_MENU_ITEMS,
         .items = menu_items,
     };
